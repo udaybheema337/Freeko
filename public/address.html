@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Address | FreshKart</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAMp1w_Heip6hkkUT8eQASjthVhHroeGY&libraries=places"></script>
+</head>
+<body>
+    <div class="container">
+        <h2>📍 Set Location</h2>
+        <div id="map" style="height:300px; width:100%; margin-bottom:15px; background:#eee;"></div>
+        <input type="text" id="fullAddress" placeholder="House/Flat No">
+        <p id="statusMsg">Detecting...</p>
+        <button id="confirmBtn" onclick="saveLocation()" disabled>Confirm & Pay</button>
+    </div>
+    <script type="module" src="js/maps.js"></script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Track Order | FreshKart</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* --- MOBILE TRACKING STYLES --- */
+        body { background: #f4f6f8; padding-bottom: 20px; }
+
+        /* 1. STATUS HEADER CARD */
+        .status-card {
+            background: white;
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom-left-radius: 25px;
+            border-bottom-right-radius: 25px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+
+        .status-icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: bounce 2s infinite;
+        }
+
+        .status-title {
+            font-size: 22px;
+            font-weight: 800;
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .order-id {
+            font-size: 14px;
+            color: #888;
+            background: #f4f6f8;
+            padding: 4px 10px;
+            border-radius: 15px;
+            display: inline-block;
+        }
+
+        /* 2. DRIVER INFO (Hidden by default) */
+        .driver-box {
+            background: white;
+            margin: 0 15px 20px 15px;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border-left: 5px solid #0c831f;
+        }
+        .driver-details h4 { margin: 0; font-size: 16px; color: #333; }
+        .driver-details p { margin: 2px 0 0; font-size: 13px; color: #666; }
+        .btn-call {
+            background: #e8f5e9; color: #0c831f;
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 18px; border: 1px solid #c8e6c9;
+        }
+
+        /* 3. VERTICAL TIMELINE */
+        .timeline-box {
+            background: white;
+            margin: 0 15px;
+            padding: 25px 20px;
+            border-radius: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        .step {
+            display: flex;
+            gap: 15px;
+            position: relative;
+            padding-bottom: 30px;
+        }
+        .step:last-child { padding-bottom: 0; }
+
+        /* The Vertical Line */
+        .step::before {
+            content: ''; position: absolute; left: 14px; top: 30px; bottom: 0;
+            width: 2px; background: #f0f0f0;
+        }
+        .step:last-child::before { display: none; }
+
+        /* The Dot */
+        .step-dot {
+            width: 30px; height: 30px;
+            border-radius: 50%;
+            background: white;
+            border: 2px solid #ddd;
+            color: #ccc;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 14px;
+            z-index: 2;
+        }
+        
+        /* Active State */
+        .step.active .step-dot {
+            background: #0c831f;
+            border-color: #0c831f;
+            color: white;
+        }
+        .step.active::before { background: #0c831f; }
+
+        .step-text h4 { margin: 0; font-size: 16px; color: #aaa; }
+        .step-text p { margin: 3px 0 0; font-size: 13px; color: #ccc; }
+        
+        .step.active .step-text h4 { color: #333; }
+        .step.active .step-text p { color: #888; }
+
+        /* Animation */
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div style="display:flex; align-items:center;">
+            <button class="back-btn" onclick="window.location.href='index.html'">←</button>
+            <h1>Track Order</h1>
+        </div>
+        <button onclick="window.location.href='history.html'" style="background:transparent; border:none; font-size:20px;">📜</button>
+    </nav>
+
+    <div id="loading" style="text-align:center; padding-top:100px; color:#888;">
+        <p>Finding your order...</p>
+    </div>
+
+    <div id="tracking-container" style="display:none;">
+        
+        <div class="status-card">
+            <div class="status-icon" id="status-icon">🕒</div>
+            <div class="status-title" id="status-text">Order Placed</div>
+            <div class="order-id" id="order-id">#Loading</div>
+        </div>
+
+        <div id="driver-container"></div>
+
+        <div class="timeline-box">
+            <div class="step active">
+                <div class="step-dot">✓</div>
+                <div class="step-text">
+                    <h4>Order Placed</h4>
+                    <p>We have received your order.</p>
+                </div>
+            </div>
+
+            <div class="step" id="step-assigned">
+                <div class="step-dot">🛵</div>
+                <div class="step-text">
+                    <h4>Out for Delivery</h4>
+                    <p>Partner has picked up your items.</p>
+                </div>
+            </div>
+
+            <div class="step" id="step-delivered">
+                <div class="step-dot">🏠</div>
+                <div class="step-text">
+                    <h4>Delivered</h4>
+                    <p>Enjoy your fresh items!</p>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:30px;">
+            <a href="https://wa.me/91 7995972776" target="_blank" style="color:#0c831f; font-weight:bold; text-decoration:none; border:1px solid #0c831f; padding:10px 20px; border-radius:30px;">
+                💬 Need Help? Chat on WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <script type="module">
+        import { db, auth } from "./js/config.js";
+        import { collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        onAuthStateChanged(auth, async (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            // GET LATEST ORDER
+            const q = query(
+                collection(db, "orders"), 
+                where("userId", "==", user.uid), 
+                orderBy("timestamp", "desc"), 
+                limit(1)
+            );
+
+            const snapshot = await getDocs(q);
+
+            if (snapshot.empty) {
+                document.getElementById("loading").innerHTML = "<p>No active orders found.</p><br><a href='index.html'>Start Shopping</a>";
+                return;
+            }
+
+            const docSnap = snapshot.docs[0];
+            const order = docSnap.data();
+            const status = order.status;
+
+            // SHOW UI
+            document.getElementById("loading").style.display = "none";
+            document.getElementById("tracking-container").style.display = "block";
+            
+            // UPDATE HEADER
+            document.getElementById("order-id").innerText = "Order #" + docSnap.id.substring(0, 6).toUpperCase();
+            const statusText = document.getElementById("status-text");
+            const statusIcon = document.getElementById("status-icon");
+
+            // UPDATE TIMELINE & STATES
+            const stepAssigned = document.getElementById("step-assigned");
+            const stepDelivered = document.getElementById("step-delivered");
+
+            if (status === "Assigned" || status === "Delivered") {
+                stepAssigned.classList.add("active");
+                statusText.innerText = "Order Picked Up";
+                statusIcon.innerText = "🛵";
+                
+                // SHOW DRIVER INFO
+                if (order.deliveryBoyPhone) {
+                    fetchDriver(order.deliveryBoyPhone);
+                } else {
+                    // Fallback if assigned but no phone data
+                    document.getElementById("driver-container").innerHTML = `
+                        <div class="driver-box">
+                            <div class="driver-details">
+                                <h4>Delivery Partner Assigned</h4>
+                                <p>On the way to store</p>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            if (status === "Delivered") {
+                stepDelivered.classList.add("active");
+                statusText.innerText = "Order Delivered";
+                statusIcon.innerText = "🎉";
+                document.getElementById("driver-container").style.display = "none"; // Hide driver after delivery
+            }
+        });
+
+        // Helper to get Driver Name
+        async function fetchDriver(phone) {
+            const q = query(collection(db, "delivery_agents"), where("phone", "==", phone));
+            const snap = await getDocs(q);
+            
+            let name = "Partner";
+            if (!snap.empty) {
+                name = snap.docs[0].data().name;
+            }
+
+            document.getElementById("driver-container").innerHTML = `
+                <div class="driver-box">
+                    <div class="driver-details">
+                        <h4>Picked up by ${name}</h4>
+                        <p>Arriving soon with your order</p>
+                    </div>
+                    <a href="tel:${phone}" class="btn-call">📞</a>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

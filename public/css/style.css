@@ -1,0 +1,441 @@
+/* --- RESET & BASICS --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    -webkit-tap-highlight-color: transparent; /* Removes blue tap highlight on mobile */
+}
+
+body {
+    background-color: #f4f6fb;
+    color: #333;
+    padding-bottom: 80px; /* Space for bottom elements if needed */
+}
+
+/* --- MOBILE NAVIGATION --- */
+nav {
+    background: white;
+    padding: 12px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+nav h1 {
+    font-size: 22px;
+    color: #0c831f; /* Brand Green */
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+nav button {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 14px;
+    margin: 0 0 0 8px; /* Spacing between buttons */
+}
+
+/* --- HERO SECTION --- */
+.hero {
+    background: linear-gradient(135deg, #d4fc79 0%, #96e6a1 100%);
+    padding: 30px 20px;
+    text-align: center;
+    border-bottom-right-radius: 20px;
+    border-bottom-left-radius: 20px;
+    margin-bottom: 20px;
+}
+
+.hero h2 {
+    color: #054a10;
+    font-size: 18px;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* --- PRODUCT GRID (MOBILE OPTIMIZED) --- */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 2 Items per row exactly */
+    gap: 12px;
+    padding: 0 12px;
+}
+
+/* --- PRODUCT CARD --- */
+.card {
+    background: white;
+    border-radius: 16px;
+    padding: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.1s;
+}
+
+.card:active {
+    transform: scale(0.98); /* Subtle click effect */
+}
+
+/* Real Image Styling */
+.prod-img {
+    width: 100%;
+    height: 110px; /* Fixed height for consistency */
+    object-fit: contain; /* Keeps entire image visible */
+    margin-bottom: 10px;
+    border-radius: 8px;
+}
+
+.card h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    color: #222;
+    text-align: left;
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; /* ... if text is too long */
+}
+
+.card p {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 12px;
+    text-align: left;
+    width: 100%;
+}
+
+/* --- BUTTONS --- */
+button {
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: background 0.2s;
+}
+
+/* The "ADD" Button */
+.btn-add {
+    background: white;
+    color: #0c831f;
+    border: 1px solid #0c831f;
+    padding: 8px;
+    width: 100%;
+    border-radius: 8px;
+    font-size: 14px;
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(12, 131, 31, 0.1);
+}
+
+/* The Qty Control (- 1 +) */
+.qty-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #0c831f;
+    border-radius: 8px;
+    width: 100%;
+    height: 36px; /* Touch friendly height */
+    overflow: hidden;
+}
+
+.btn-qty {
+    background: transparent;
+    color: white;
+    width: 35px;
+    height: 100%;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qty-text {
+    color: white;
+    font-size: 15px;
+    font-weight: bold;
+}
+
+/* Cart Button */
+button[onclick*="cart.html"] {
+    background-color: #0c831f;
+    color: white;
+}
+
+/* Login Button */
+#loginBtn {
+    background-color: #333;
+    color: white;
+}
+
+/* =========================================
+   2. CART PAGE STYLES
+   ========================================= */
+
+/* The Card Wrapper for each item */
+.cart-item {
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.03);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cart-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 🔴 FIX FOR GIANT IMAGES 🔴 */
+.cart-thumb {
+    width: 60px !important;
+    height: 60px !important;
+    object-fit: contain;
+    border-radius: 8px;
+    border: 1px solid #eee;
+    background: #f9f9f9;
+    flex-shrink: 0;
+}
+
+.cart-info h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+    color: #222;
+}
+
+.cart-info p {
+    font-size: 13px;
+    color: #666;
+    margin: 0;
+}
+
+/* Quantity Control (+/- Buttons) */
+.cart-qty-box {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #0c831f;
+    border-radius: 6px;
+    height: 32px;
+    overflow: hidden;
+}
+
+.cart-qty-btn {
+    background: #f0fdf4;
+    color: #0c831f;
+    border: none;
+    width: 30px;
+    height: 100%;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cart-qty-num {
+    padding: 0 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #0c831f;
+}
+
+/* =========================================
+   3. PAYMENT PAGE STYLES
+   ========================================= */
+
+/* Section Headings */
+h3 {
+    font-size: 13px;
+    color: #888;
+    text-transform: uppercase;
+    font-weight: 700;
+    margin: 20px 0 10px 5px;
+    letter-spacing: 0.5px;
+}
+
+/* Bill Summary Card */
+.bill-card, #bill-container {
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+}
+
+.bill-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 15px;
+    color: #555;
+}
+
+.bill-total {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px dashed #ddd;
+    font-size: 18px;
+    font-weight: 800;
+    color: #222;
+}
+
+.text-green { color: #0c831f; font-weight: 700; }
+.text-red { color: #e74c3c; font-weight: 700; }
+
+/* Payment Options (Radio Buttons) */
+.pay-option {
+    display: flex;
+    align-items: center;
+    background: white;
+    border: 1px solid #e0e0e0;
+    padding: 18px;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+/* Active State Green Border */
+.pay-option:has(input:checked) {
+    border: 2px solid #0c831f;
+    background: #f0fdf4;
+}
+
+.pay-option input {
+    width: 20px;
+    height: 20px;
+    accent-color: #0c831f;
+    margin-right: 15px;
+}
+
+.pay-text strong { display: block; font-size: 16px; color: #333; margin-bottom: 2px; }
+.pay-text small { font-size: 13px; color: #777; }
+
+
+/* =========================================
+   4. STICKY FOOTERS (CART & PAYMENT)
+   ========================================= */
+
+/* Generic Bottom Bar (Used in Cart) */
+.bottom-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 15px 20px;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.08);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 900;
+}
+
+.total-label { font-size: 12px; color: #888; font-weight: 700; text-transform: uppercase; }
+.total-price { font-size: 20px; font-weight: 800; color: #333; }
+
+.btn-checkout {
+    background: #0c831f;
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 700;
+    box-shadow: 0 4px 10px rgba(12, 131, 31, 0.3);
+    cursor: pointer;
+}
+
+/* BIG GREEN BUTTON (Used in Payment) */
+.pay-footer, .bottom-pay-bar {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: white;
+    padding: 15px 20px;
+    box-shadow: 0 -4px 15px rgba(0,0,0,0.05);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+}
+
+.btn-pay-big, .pay-btn {
+    width: 100%;
+    max-width: 600px;
+    background: #0c831f;
+    color: white;
+    border: none;
+    padding: 15px;
+    font-size: 18px;
+    font-weight: 800;
+    border-radius: 10px;
+    text-transform: uppercase;
+    box-shadow: 0 4px 12px rgba(12, 131, 31, 0.4);
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-pay-big:active {
+    transform: scale(0.98);
+}
+
+/* =========================================
+   5. TRACKING PAGE STYLES
+   ========================================= */
+.status-card {
+    background: white;
+    padding: 30px 20px;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 20px;
+}
+
+.step {
+    display: flex;
+    gap: 15px;
+    position: relative;
+    padding-bottom: 30px;
+    margin: 0 20px;
+}
+.step::before {
+    content: ''; position: absolute; left: 14px; top: 30px; bottom: 0;
+    width: 2px; background: #eee;
+}
+.step:last-child::before { display: none; }
+
+.step-dot {
+    width: 30px; height: 30px; border-radius: 50%;
+    background: #eee; color: #aaa;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 2; border: 2px solid white;
+}
+
+.step.active .step-dot {
+    background: #0c831f; color: white;
+}
+
+.driver-box {
+    background: #e8f5e9;
+    border: 1px solid #c8e6c9;
+    padding: 15px;
+    margin: 0 15px 20px;
+    border-radius: 12px;
+    display: flex; justify-content: space-between; align-items: center;
+}

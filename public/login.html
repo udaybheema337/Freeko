@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Login | FreshKart</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        /* --- MOBILE LOGIN STYLES --- */
+        body {
+            background-color: #f4f6f8;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .auth-container {
+            background: white;
+            width: 100%;
+            max-width: 400px;
+            padding: 30px 25px;
+            border-radius: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        h2 {
+            text-align: center;
+            color: #0c831f;
+            margin-bottom: 5px;
+            font-size: 24px;
+        }
+
+        p.subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        /* Input Fields */
+        input {
+            width: 100%;
+            padding: 14px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            background: #f9f9f9;
+            border-radius: 10px;
+            font-size: 15px;
+            outline: none;
+            transition: 0.2s;
+        }
+
+        input:focus {
+            border-color: #0c831f;
+            background: #fff;
+        }
+
+        /* Buttons */
+        .btn-auth {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+            color: white;
+            transition: transform 0.1s;
+        }
+
+        .btn-auth:active { transform: scale(0.98); }
+
+        .btn-login { background: #333; }
+        .btn-register { background: #0c831f; }
+
+        /* Links */
+        .toggle-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+        }
+        .toggle-link a {
+            color: #0c831f;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        /* Section Dividers for Registration */
+        .form-section-title {
+            font-size: 12px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: bold;
+            margin: 20px 0 10px 5px;
+            letter-spacing: 0.5px;
+        }
+
+        /* Flex Row for small inputs */
+        .flex-row { display: flex; gap: 10px; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        
+        <div style="text-align:center; margin-bottom:20px;">
+            <span style="font-size:40px;">🥦</span>
+        </div>
+        <h2>FreshKart</h2>
+        <p class="subtitle" id="page-subtitle">Grocery delivery at your door</p>
+
+        <div id="login-box">
+            <input type="email" id="loginEmail" placeholder="Email Address">
+            <input type="password" id="loginPass" placeholder="Password">
+            
+            <button onclick="handleLogin()" class="btn-auth btn-login">Log In</button>
+            
+            <div class="toggle-link">
+                New User? <a href="#" onclick="toggleForms()">Create an Account</a>
+            </div>
+        </div>
+
+        <div id="register-box" style="display:none;">
+            
+            <div class="form-section-title">Personal Details</div>
+            <input type="text" id="regName" placeholder="Full Name">
+            <input type="email" id="regEmail" placeholder="Email Address">
+            <input type="password" id="regPass" placeholder="Set Password">
+            <input type="tel" id="regPhone" placeholder="Mobile Number">
+
+            <div class="form-section-title">Delivery Address</div>
+            <input type="text" id="regBuilding" placeholder="Building / Apartment Name">
+            
+            <div class="flex-row">
+                <input type="text" id="regBlock" placeholder="Block" style="flex:1;">
+                <input type="text" id="regFloor" placeholder="Floor" style="flex:1;">
+            </div>
+
+            <input type="text" id="regDoor" placeholder="Flat / Door No.">
+            <input type="text" id="regArea" placeholder="Area / Landmark">
+
+            <button onclick="handleRegister()" class="btn-auth btn-register">Sign Up</button>
+            
+            <div class="toggle-link">
+                Already have an account? <a href="#" onclick="toggleForms()">Log In</a>
+            </div>
+        </div>
+
+        <p id="error-msg" style="color:#e74c3c; text-align:center; margin-top:15px; font-size:14px;"></p>
+
+    </div>
+
+    <script>
+        function toggleForms() {
+            const login = document.getElementById("login-box");
+            const reg = document.getElementById("register-box");
+            const subtitle = document.getElementById("page-subtitle");
+            const errorMsg = document.getElementById("error-msg");
+
+            // Clear errors when switching
+            errorMsg.innerText = "";
+
+            if (login.style.display === "none") {
+                login.style.display = "block";
+                reg.style.display = "none";
+                subtitle.innerText = "Grocery delivery at your door";
+            } else {
+                login.style.display = "none";
+                reg.style.display = "block";
+                subtitle.innerText = "Create an account to get started";
+            }
+        }
+    </script>
+    
+    <script type="module" src="js/auth.js"></script>
+
+</body>
+</html>

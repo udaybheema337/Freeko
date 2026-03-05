@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmed</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Success Animation Circle */
+        .success-circle {
+            width: 100px;
+            height: 100px;
+            background: #e8f5e9;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .check-icon {
+            font-size: 50px;
+            color: #0c831f;
+        }
+
+        h1 { font-size: 24px; color: #333; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 30px; font-size: 15px; }
+
+        .btn-track {
+            background: #0c831f;
+            color: white;
+            padding: 15px 40px;
+            border-radius: 30px;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(12, 131, 31, 0.3);
+            width: 100%;
+            max-width: 300px;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="success-circle">
+        <div class="check-icon">✓</div>
+    </div>
+
+    <h1>Order Confirmed!</h1>
+    <p>Thank you for shopping with FreshKart.<br>Your items will be delivered tomorrow morning.</p>
+
+    <button class="btn-track" onclick="window.location.href='tracking.html'">
+        Track Order
+    </button>
+
+    <br>
+    <button onclick="window.location.href='index.html'" style="background:none; border:none; color:#888; margin-top:15px; text-decoration:underline;">
+        Back to Home
+    </button>
+
+</body>
+</html>

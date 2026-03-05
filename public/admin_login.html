@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login | FreshKart</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="background-color: #f0f2f5; display: flex; align-items: center; justify-content: center; height: 100vh;">
+
+    <div class="container" style="max-width: 400px; text-align: center;">
+        
+        <div style="font-size: 50px; margin-bottom: 10px;">👨‍💻</div>
+        <h2 style="color:#333; margin-bottom: 5px;">Admin Portal</h2>
+        <p style="color:#666; margin-bottom: 25px;">Secure Access Only</p>
+        
+        <div class="card" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            
+            <input type="email" id="adminEmail" placeholder="admin@freshkart.com" 
+                   style="width: 100%; padding: 12px; margin-bottom: 15px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
+            
+            <input type="password" id="adminPass" placeholder="Password" 
+                   style="width: 100%; padding: 12px; margin-bottom: 20px; border: 1px solid #ddd; border-radius: 6px; font-size: 16px;">
+            
+            <button onclick="adminLogin()" id="loginBtn" 
+                    style="width: 100%; padding: 12px; background: #2c3e50; color: white; border: none; border-radius: 6px; font-size: 16px; font-weight: bold; cursor: pointer;">
+                Login
+            </button>
+
+        </div>
+        
+        <p id="status-msg" style="color:red; margin-top:15px; font-size: 14px; min-height: 20px;"></p>
+        <a href="index.html" style="color:#888; text-decoration:none; font-size:13px; margin-top:20px; display:block;">← Back to Shop</a>
+    </div>
+
+    <script type="module">
+        import { auth, db } from "./js/config.js";
+        import { signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+        import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        window.adminLogin = async () => {
+            const email = document.getElementById("adminEmail").value;
+            const pass = document.getElementById("adminPass").value;
+            const msg = document.getElementById("status-msg");
+            const btn = document.getElementById("loginBtn");
+
+            if(!email || !pass) {
+                msg.innerText = "Please enter email and password";
+                return;
+            }
+
+            try {
+                msg.innerText = "";
+                btn.innerText = "Verifying...";
+                btn.disabled = true;
+
+                // 1. Firebase Auth Login
+                const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+                const user = userCredential.user;
+
+                // 2. Check if User is actually an Admin in Firestore
+                // This prevents regular users from logging into the admin panel
+                const q = query(collection(db, "admins"), where("email", "==", user.email));
+                const snapshot = await getDocs(q);
+
+                if (!snapshot.empty) {
+                    // Success: Redirect to Dashboard
+                    msg.style.color = "green";
+                    msg.innerText = "Success! Redirecting...";
+                    window.location.href = "admin.html";
+                } else {
+                    // Fail: Not in 'admins' list
+                    msg.style.color = "red";
+                    msg.innerText = "Access Denied: You are not an Admin.";
+                    await auth.signOut();
+                    btn.innerText = "Login";
+                    btn.disabled = false;
+                }
+
+            } catch (error) {
+                console.error(error);
+                msg.style.color = "red";
+                btn.innerText = "Login";
+                btn.disabled = false;
+
+                if(error.code === "auth/invalid-credential") {
+                    msg.innerText = "Incorrect Email or Password";
+                } else {
+                    msg.innerText = "Error: " + error.message;
+                }
+            }
+        };
+    </script>
+</body>
+</html>

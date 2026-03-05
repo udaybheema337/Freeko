@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Delivery Partner Login</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container" style="max-width: 400px; margin-top: 50px; text-align: center;">
+        <h2 style="color:#2c3e50;">🚚 Delivery Partner</h2>
+        
+        <div class="card">
+            <input type="tel" id="dPhone" placeholder="Enter Mobile Number" style="margin-bottom:15px;">
+            <input type="password" id="dPin" placeholder="Enter 4-Digit PIN" maxlength="4">
+            <button onclick="deliveryLogin()" style="background:#2ecc71; margin-top:15px;">Login</button>
+        </div>
+        
+        <p id="error-msg" style="color:red; margin-top:10px;"></p>
+    </div>
+
+    <script type="module">
+        import { db } from "./js/config.js";
+        import { collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        window.deliveryLogin = async () => {
+            const phone = document.getElementById("dPhone").value;
+            const pin = document.getElementById("dPin").value;
+            const msg = document.getElementById("error-msg");
+
+            if(!phone || !pin) {
+                msg.innerText = "Please enter Phone and PIN.";
+                return;
+            }
+
+            msg.innerText = "Verifying...";
+            
+            // Check if this agent exists in database
+            const q = query(collection(db, "delivery_agents"), where("phone", "==", phone), where("pin", "==", pin));
+            const snap = await getDocs(q);
+
+            if (!snap.empty) {
+                // Success! Save session and redirect
+                const agent = snap.docs[0].data();
+                localStorage.setItem("agentPhone", agent.phone);
+                localStorage.setItem("agentName", agent.name);
+                window.location.href = "delivery.html";
+            } else {
+                msg.innerText = "❌ Invalid Phone or PIN.";
+            }
+        };
+    </script>
+</body>
+</html>

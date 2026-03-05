@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Freeko | Shop</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="manifest" href="/manifest.json">
+    <style>
+        /* Floating Tracking Bar */
+        #active-order-bar {
+            position: fixed; bottom: 70px; left: 50%; transform: translateX(-50%);
+            width: 90%; max-width: 400px;
+            background: #2c3e50; color: white;
+            padding: 12px 20px; border-radius: 50px;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 900;
+            cursor: pointer; animation: slideUp 0.5s ease-out;
+        }
+        @keyframes slideUp { from { bottom: -50px; opacity: 0; } to { bottom: 70px; opacity: 1; } }
+    </style>
+</head>
+<body>
+    <nav>
+        <h1>🥦 Freeko</h1>
+        <div>
+            <button onclick="window.location.href='tracking.html'" style="background:transparent; border:none; font-size:18px;">📍</button>
+            <button onclick="window.location.href='history.html'" style="background:transparent; border:none; font-size:18px;">📜</button>
+            <button onclick="window.location.href='cart.html'" style="background:#0c831f; color:white; padding:5px 12px; border-radius:20px; font-size:14px;">🛒 Cart</button>
+            <button id="loginBtn" style="font-size:14px;">Login</button>
+        </div>
+    </nav>
+
+    <div style="padding: 15px 15px 0 15px; position: sticky; top: 60px; z-index: 800; background: #f4f6fb;">
+        <input type="text" id="searchInput" placeholder="🔍 Search for milk, onion..." 
+               style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #ddd; font-size: 16px;">
+
+        <div class="category-scroll" style="display: flex; gap: 10px; overflow-x: auto; padding: 15px 0;">
+            <button class="cat-btn active" onclick="filterCat('All')">All</button>
+            <button class="cat-btn" onclick="filterCat('Vegetables')">🥦 Vegetables</button>
+            <button class="cat-btn" onclick="filterCat('Roots')">🥕 Roots</button>
+            <button class="cat-btn" onclick="filterCat('Leafs')">🥬 Leafs</button>
+            <button class="cat-btn" onclick="filterCat('Fruits')">🍎 Fruits</button>
+            <button class="cat-btn" onclick="filterCat('Flowers')">💐 flowers</button>
+            
+        </div>
+    </div>
+
+    <div id="product-grid" class="grid-container" style="padding-top: 5px;"></div>
+
+    <div id="active-order-bar" style="display:none;" onclick="window.location.href='tracking.html'">
+        <div style="display:flex; align-items:center; gap:10px;">
+            <span style="font-size:20px;">🛵</span>
+            <span style="font-size:14px; font-weight:bold;">Order in Progress</span>
+        </div>
+        <span style="background:#0c831f; padding:5px 10px; border-radius:20px; font-size:12px; font-weight:bold;">Track ></span>
+    </div>
+
+    <script type="module" src="js/shop.js"></script>
+    <script type="module" src="js/auth.js"></script>
+
+    <script type="module">
+        import { db, auth } from "./js/config.js";
+        import { collection, query, where, getDocs, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        // IMPORT signOut HERE
+        import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+        const loginBtn = document.getElementById("loginBtn");
+
+        onAuthStateChanged(auth, async (user) => {
+            if (user) {
+                // --- 1. HANDLE BUTTON FOR LOGGED-IN USER ---
+                loginBtn.innerText = "Logout";
+                loginBtn.style.background = "#e74c3c"; // Red background
+                loginBtn.style.color = "white";
+                loginBtn.style.border = "none";
+                loginBtn.style.padding = "5px 12px";
+                loginBtn.style.borderRadius = "20px";
+                loginBtn.style.cursor = "pointer";
+
+                loginBtn.onclick = async () => {
+                    await signOut(auth);
+                    localStorage.removeItem("cart"); // Optional: Clear cart on logout
+                    window.location.reload(); 
+                };
+
+                // --- 2. HANDLE TRACKING BAR ---
+                const q = query(collection(db, "orders"), where("userId", "==", user.uid), orderBy("timestamp", "desc"), limit(1));
+                const snap = await getDocs(q);
+                if (!snap.empty) {
+                    const status = snap.docs[0].data().status;
+                    if (status !== 'Delivered' && status !== 'Cancelled') {
+                        document.getElementById("active-order-bar").style.display = "flex";
+                    }
+                }
+            } else {
+                // --- 3. HANDLE BUTTON FOR LOGGED-OUT USER ---
+                loginBtn.innerText = "Login";
+                loginBtn.style.background = "#333";
+                loginBtn.style.color = "white";
+                loginBtn.style.border = "none";
+                loginBtn.style.padding = "5px 12px";
+                loginBtn.style.borderRadius = "20px";
+                loginBtn.style.cursor = "pointer";
+
+                loginBtn.onclick = () => {
+                    window.location.href = "login.html";
+                };
+            }
+        });
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('Service Worker Registered!'))
+                    .catch(err => console.error('Service Worker Registration Failed:', err));
+            });
+        }
+    </script>
+</body>
+</html>

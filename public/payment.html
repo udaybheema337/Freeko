@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Checkout</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+    <nav>
+        <button onclick="window.history.back()" class="back-btn">←</button>
+        <h1>Select Payment</h1>
+    </nav>
+
+    <div class="container" style="padding-bottom: 100px;">
+        
+        <h3>Order Summary</h3>
+        <div id="bill-container" class="bill-card">
+            <p style="text-align:center; color:#888;">Calculating bill...</p>
+        </div>
+
+        <h3>Payment Method</h3>
+        
+        <label class="pay-option">
+            <input type="radio" name="paymentMethod" value="COD" checked>
+            <div class="pay-text">
+                <strong>Cash on Delivery</strong>
+                <small>Pay cash to delivery partner</small>
+            </div>
+        </label>
+
+        <label class="pay-option">
+            <input type="radio" name="paymentMethod" value="ONLINE">
+            <div class="pay-text">
+                <strong>Pay Online</strong>
+                <small>UPI, Cards, Netbanking</small>
+            </div>
+        </label>
+
+    </div>
+
+    <div class="pay-footer">
+        <div>
+            <div class="total-label">Total to Pay</div>
+            <div id="footer-total">₹0</div>
+        </div>
+        <button id="payBtn" class="pay-btn">
+            PAY NOW
+        </button>
+    </div>
+    <h3 class="section-title">Delivering To:</h3>
+    <div style="background:white; padding:15px; border-radius:12px; margin-bottom:20px; border-left: 4px solid #0c831f;">
+        <h4 id="displayName" style="margin:0 0 5px 0;">Loading Name...</h4>
+        <p id="displayAddress" style="margin:0; color:#555; font-size:14px;">Fetching saved address...</p>
+        <p id="displayPhone" style="margin:5px 0 0 0; color:#888; font-size:13px;">...</p>
+    </div>
+
+    <script type="module" src="js/payment.js"></script>
+</body>
+</html>
